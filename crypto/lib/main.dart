@@ -1,3 +1,4 @@
+import 'package:crypto/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/MyHomePage.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +18,7 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.amber),
-      home: new MyHomePage(),
+      home:  SplashScreen(),
     );
   }
 }
