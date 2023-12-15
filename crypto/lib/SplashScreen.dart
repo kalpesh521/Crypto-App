@@ -1,8 +1,6 @@
 import 'dart:async';
-
-// import 'package:bmi/main.dart';
-// import 'package:flutter/cupertino.dart';
-import 'package:crypto/MyHomePage.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:crypto/GetStarted.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -11,35 +9,61 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
 
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(seconds: 4), () {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MyHomePage(
-              // title: 'BMI',
-            ),
+            builder: (context) => GetStarted(),
           ));
     });
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Color.fromARGB(255, 48, 13, 71),
+        color: Color.fromARGB(255, 34, 9, 50),
         child: Center(
-          child: Image.asset(
-            'assets/images/bitcoin.png',
-            width: 120, // Set the width here
-            height: 120,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/bitcoin.png',
+                width: 150,
+                height: 150,
+              ),
+              SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  
+                  Text('Crypto',
+                      style: TextStyle(
+                        color: Colors.amber,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      )),
+
+                  Text(
+                    'Verse',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  ].animate(interval: 500.ms).fade(duration: 3000.ms),
+               ),
+            ].animate(interval: 500.ms).slideY(duration: 3000.ms,curve: Curves.easeOut).fade(duration: 2000.ms),
           ),
         ),
       ),
     );
   }
 }
+ 
