@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:crypto/SplashGetStarted.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:crypto/GetStarted.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +18,12 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => GetStarted(),
+            builder: (context) => SplashGetStarted(),
           ));
     });
   }
 
-  @override
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 width: 150,
                 height: 150,
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

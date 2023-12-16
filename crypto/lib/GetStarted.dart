@@ -5,23 +5,10 @@ import 'package:flutter/material.dart';
 
 class GetStarted extends StatefulWidget {
   @override
-  State<GetStarted> createState() => _SplashScreenState();
+  State<GetStarted> createState() => _GetStartedState();
 }
 
-class _SplashScreenState extends State<GetStarted> {
-  void initState() {
-    super.initState();
-
-    // Timer(Duration(seconds: 4), () {
-    //   Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (context) => MyHomePage(),
-    //       ));
-    // });
-  }
-
-  @override
+class _GetStartedState extends State<GetStarted> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,38 +17,102 @@ class _SplashScreenState extends State<GetStarted> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 110),
+            SizedBox(height: 130),
             Image.asset(
               'assets/images/Crypto.jpg',
-              width: 320,
-              height: 320,
+              width: 330,
+              height: 330,
             ),
-            SizedBox(height: 15),
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Text('Track',
+            SizedBox(height: 25),
+            Row(
+              children: [
+                SizedBox(width: 35),
+                Text(
+                  'Track',
                   style: TextStyle(
-                    color: Colors.amber,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  )),
-              SizedBox(width: 8),
-              Text(
-                'Your',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 15, 158, 34),
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
+                    color: Colors.orange,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+                SizedBox(width: 8),
+                Text(
+                  'Your',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ],
+            ),
+            // Added spacing between rows
+            Row(
+              children: [
+                SizedBox(width: 35),
+                Text(
+                  'Crypto',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+                Text(
+                  'currency',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: 30), // Adjust the left padding as needed
+              child: Container(
+                height: 5,
+                width: 130, // Expand line to fill the width
+                color: Colors.orange,
+              ),
+            ),
+            SizedBox(height: 45),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyHomePage(),
+                    ),
+                  );
+                },
+                child: Text(
+                  "GET STARTED",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    Color.fromRGBO(67, 2, 102, 1),
+                  ),
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(
+                        horizontal:
+                            35), // Adjust the horizontal padding as needed
+                  ),
                 ),
               ),
-            ]),
-            Text(
-              'CryptoCurrency',
-              style: TextStyle(
-                color: Color(0xFF0F9E22),
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            )
           ],
         ),
       ),

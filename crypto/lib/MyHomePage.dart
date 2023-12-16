@@ -43,7 +43,7 @@ class MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: new AppBar(
           title: new Text(
-            'Crypto App',
+            'CryptoVerse',
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Color.fromRGBO(94, 7, 110, 0.863)),
