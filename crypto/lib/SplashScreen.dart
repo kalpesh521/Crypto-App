@@ -1,8 +1,8 @@
-import 'dart:async';
-import 'package:crypto/SplashGetStarted.dart';
+import 'dart:async'; 
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:crypto/GetStarted.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,19 +11,20 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   void initState() {
-    
     super.initState();
 
     Timer(Duration(seconds: 4), () {
       Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SplashGetStarted(),
-          ));
+        context,
+        PageTransition(
+          type: PageTransitionType.leftToRight,
+          duration: Duration(milliseconds: 700), // Set the transition duration
+          child: GetStarted(),
+        ),
+      );
     });
   }
 
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,14 +43,12 @@ class _SplashScreenState extends State<SplashScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  
                   Text('Crypto',
                       style: TextStyle(
                         color: Colors.amber,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                       )),
-
                   Text(
                     'Verse',
                     style: TextStyle(
@@ -58,13 +57,15 @@ class _SplashScreenState extends State<SplashScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  ].animate(interval: 500.ms).fade(duration: 3000.ms),
-               ),
-            ].animate(interval: 500.ms).slideY(duration: 3000.ms,curve: Curves.easeOut).fade(duration: 2000.ms),
+                ].animate(interval: 500.ms).fade(duration: 3000.ms),
+              ),
+            ]
+                .animate(interval: 500.ms)
+                .slideY(duration: 3000.ms, curve: Curves.easeOut)
+                .fade(duration: 2000.ms),
           ),
         ),
       ),
     );
   }
 }
- 

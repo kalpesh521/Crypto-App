@@ -42,6 +42,7 @@ class MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
+          automaticallyImplyLeading: false, // Removes the back arrow
           title: new Text(
             'CryptoVerse',
             style: TextStyle(color: Colors.white),
