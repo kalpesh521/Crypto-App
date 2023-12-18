@@ -68,28 +68,57 @@ Widget _cryptoWidget(List<dynamic> currencies) {
       child: Column(
     children: <Widget>[
       Padding(
-          padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 16.0),
-          child: Text.rich(
-            TextSpan(
-              text:
-                  'Today\'s Cryptocurrency Prices by Market Cap\'s                    ',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                // fontFamily: 'Roboto',
-              ),
-              children: <InlineSpan>[
-                TextSpan(
-                  text: 'Live Now',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey.withOpacity(1.0),
-                  ),
-                ),
-              ],
+        padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 16.0),
+        child: Text.rich(
+          TextSpan(
+            text:
+                'Today\'s Cryptocurrency Prices by Market Cap\'s                    ',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              // fontFamily: 'Roboto',
             ),
-          )),
+            children: <InlineSpan>[
+              TextSpan(
+                text: 'Live Now',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey.withOpacity(1.0),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
+        child: Container(
+          height: 45,
+          width: 400,
+          child: TextField(
+            decoration: InputDecoration(
+              prefixIconColor: Colors.amber,
+              prefixIcon: Icon(Icons.search),
+              labelText: 'Search for an asset',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(40.0),
+                borderSide: BorderSide(
+                  color: Color.fromARGB(255, 255, 174, 44),
+                  width: 13.0,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                borderSide: BorderSide(
+                  color: Color.fromARGB(255, 255, 174, 44),
+                  width: 2.0,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       SizedBox(height: 5),
       Container(
         decoration: BoxDecoration(

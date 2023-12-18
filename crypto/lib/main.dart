@@ -19,7 +19,8 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.amber),
-      home:  SplashScreen(),
+      // home:  SplashScreen(),
+      home: MyHomePage(),
       debugShowCheckedModeBanner: false, 
     );
   }
