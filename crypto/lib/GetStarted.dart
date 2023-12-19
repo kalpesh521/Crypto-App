@@ -26,7 +26,7 @@ class _GetStartedState extends State<GetStarted> {
               top: 0,
               right: 0,
               child: ClipPath(
-                clipper: Clip3Clipper(),
+                clipper: ClipUpClipper(),
                 child: Container(
                   height: 100,
                   width: 100,
@@ -92,7 +92,7 @@ class _GetStartedState extends State<GetStarted> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 30),
+                  padding: EdgeInsets.only(left: 25),
                   child: Container(
                     height: 5,
                     width: 130,
@@ -126,9 +126,7 @@ class _GetStartedState extends State<GetStarted> {
                         Color.fromRGBO(67, 2, 102, 1),
                       ),
                       padding: MaterialStateProperty.all(
-                        EdgeInsets.symmetric(
-                            horizontal:
-                                35), // Adjust the horizontal padding as needed
+                        EdgeInsets.symmetric(horizontal: 35),
                       ),
                     ),
                   ),
@@ -137,7 +135,7 @@ class _GetStartedState extends State<GetStarted> {
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: ClipPath(
-                      clipper: clip2Clipper(),
+                      clipper: clipDownClipper(),
                       child: Container(
                         height: 100,
                         width: 100,
@@ -155,12 +153,12 @@ class _GetStartedState extends State<GetStarted> {
   }
 }
 
-class clip2Clipper extends CustomClipper<Path> {
+class ClipUpClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
-    path.lineTo(0, size.height);
+    path.lineTo(size.width, 0);
     path.lineTo(size.width, size.height);
-    path.quadraticBezierTo(size.width, 0, 0, 0);
+    path.quadraticBezierTo(0, size.height, 0, 0);
 
     return path;
   }
@@ -168,12 +166,12 @@ class clip2Clipper extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => true;
 }
 
-class Clip3Clipper extends CustomClipper<Path> {
+class clipDownClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
-    path.lineTo(size.width, 0);
+    path.lineTo(0, size.height);
     path.lineTo(size.width, size.height);
-    path.quadraticBezierTo(0, size.height, 0, 0);
+    path.quadraticBezierTo(size.width, 0, 0, 0);
 
     return path;
   }

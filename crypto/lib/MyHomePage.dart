@@ -14,11 +14,18 @@ class MyHomePageState extends State<MyHomePage> {
   bool init = false;
   List<dynamic> filteredCurrencies = [];
   TextEditingController? text_controller;
+  Color _textColor = Colors.red;
 
   @override
   void initState() {
     super.initState();
     text_controller = TextEditingController();
+    Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      setState(() {
+        _textColor = colors[colorIndex];
+        colorIndex = (colorIndex + 1) % colors.length;
+      });
+    });
   }
 
   @override
@@ -57,19 +64,30 @@ class MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: new Text(
-          'CryptoVerse',
-          style: TextStyle(color: Colors.white, fontFamily: 'Open Sans'),
+        title: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Image.asset(
+                'assets/images/bitcoin.png',
+                width: 30,
+                height: 30,
+              ),
+            ),
+            Text(
+              'CryptoVerse',
+              style: TextStyle(color: Colors.white, fontFamily: 'Open Sans'),
+            ),
+          ],
         ),
         backgroundColor: Color.fromRGBO(94, 7, 110, 0.863),
       ),
       body: currencies == null
-          ? CircularProgressIndicator()
+          ? Center(child: CircularProgressIndicator())
           : _cryptoWidget(currencies),
     );
   }
@@ -89,15 +107,14 @@ class MyHomePageState extends State<MyHomePage> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                // fontFamily: 'Roboto',
               ),
               children: <InlineSpan>[
                 TextSpan(
-                  text: 'Live Now',
+                  text: 'Live Prices',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey.withOpacity(1.0),
+                    color: _textColor,
                   ),
                 ),
               ],
@@ -107,29 +124,25 @@ class MyHomePageState extends State<MyHomePage> {
         Padding(
           padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 10.0),
           child: Container(
-            height: 45,
+            height: 50,
             width: 400,
-            child: TextField(
-              controller: text_controller,
-              decoration: InputDecoration(
-                prefixIconColor: Colors.amber,
-                prefixIcon: Icon(Icons.search),
-                labelText: 'Search Cryptocurrencies',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(40.0),
-                  borderSide: BorderSide(
-                    color: Colors.red,
-                    width: 13.0,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 255, 174, 44),
-                    width: 2.0,
-                  ),
-                ),
+            child: SearchBar(
+              leading: const Icon(
+                Icons.search,
+                color: Colors.amber,
               ),
+              surfaceTintColor:
+                  MaterialStateProperty.all(Color.fromARGB(255, 175, 251, 255)),
+              shadowColor:
+                  MaterialStateProperty.all(Color.fromARGB(255, 217, 217, 217)),
+              overlayColor:
+                  MaterialStateProperty.all(Color.fromRGBO(225, 255, 255, 1)),
+              elevation: MaterialStateProperty.all(15.0),
+              side: MaterialStateProperty.all(
+                  const BorderSide(color: Color.fromARGB(255, 243, 243, 243))),
+              hintText: 'Search Cryptocurrencies',
+              hintStyle: MaterialStateProperty.all(
+                  const TextStyle(color: Color.fromARGB(255, 146, 146, 146))),
               onChanged: _searchCurrencies,
             ),
           ),
@@ -139,10 +152,11 @@ class MyHomePageState extends State<MyHomePage> {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
+                color:
+                    const Color.fromARGB(255, 209, 209, 209).withOpacity(0.5),
                 spreadRadius: 5,
                 blurRadius: 10,
-                offset: Offset(0, 2),
+                offset: Offset(0, 1),
               ),
             ],
           ),
@@ -234,4 +248,11 @@ final List<MaterialColor> _colors = [
   Colors.purple,
   Colors.pink,
   Colors.green,
+];
+int colorIndex = 0;
+List<Color> colors = [
+  Colors.red,
+  Colors.blue,
+  Colors.orange,
+  Color.fromARGB(255, 59, 156, 52),
 ];
