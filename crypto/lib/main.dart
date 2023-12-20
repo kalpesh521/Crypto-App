@@ -1,7 +1,8 @@
-import 'package:crypto/GetStarted.dart';
-import 'package:crypto/SplashScreen.dart';
+import 'package:crypto/View/GetStarted.dart';
+import 'package:crypto/View/SelectCoin.dart';
+import 'package:crypto/View/SplashScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:crypto/MyHomePage.dart';
+import 'package:crypto/View/MyHomePage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -19,8 +20,9 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.amber),
-      home:  SplashScreen(),
-      // home: MyHomePage(),
+      // home:  SplashScreen(),
+      home: MyHomePage(),
+      // home: SelectCoin(Selectitem),
       debugShowCheckedModeBanner: false, 
     );
   }

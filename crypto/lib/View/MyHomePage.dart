@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'package:crypto/View/SelectCoin.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -37,8 +38,11 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> getCurrencies() async {
+    
     String cryptoUrl =
         "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=abd75ba2-b9ae-44c2-89d8-80b8a044544c";
+   
+   
     var response = await http.get(Uri.parse(cryptoUrl));
     if (response.statusCode == 200) {
       final Map<String, dynamic> temp = json.decode(response.body);
@@ -178,39 +182,51 @@ class MyHomePageState extends State<MyHomePage> {
                       itemBuilder: (BuildContext context, int index) {
                         final MaterialColor color =
                             _colors[index % _colors.length];
-                        return SizedBox(
-                            width: double.infinity,
-                            height: 80,
-                            child: Card(
-                                elevation: 8,
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 2, horizontal: 10),
-                                child: Center(
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor: color,
-                                      radius: 35,
-                                      child: new Text(
-                                        Currencies[index]['symbol'].toString(),
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
+                        return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SelectCoin(Currencies[index]),
+                                ),
+                              );
+                            },
+                            child: SizedBox(
+                                width: double.infinity,
+                                height: 80,
+                                child: Card(
+                                    elevation: 8,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 2, horizontal: 10),
+                                    child: Center(
+                                      child: ListTile(
+                                        leading: CircleAvatar(
+                                          backgroundColor: color,
+                                          radius: 35,
+                                          child: new Text(
+                                            Currencies[index]['symbol']
+                                          
+                                                .toString(),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        title: Text(
+                                            Currencies[index]['name']
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        subtitle: Text(
+                                          '\$${Currencies[index]['quote']['USD']['price'].toStringAsFixed(2)}',
+                                        ),
+                                        trailing: _getSubTitle(
+                                          Currencies[index]['quote']['USD']
+                                                  ['percent_change_1h']
+                                              .toStringAsFixed(2),
+                                        ),
                                       ),
-                                    ),
-                                    title: Text(
-                                        Currencies[index]['name'].toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    subtitle: Text(
-                                      '\$${Currencies[index]['quote']['USD']['price'].toStringAsFixed(2)}',
-                                    ),
-                                    trailing: _getSubTitle(
-                                      Currencies[index]['quote']['USD']
-                                              ['percent_change_1h']
-                                          .toStringAsFixed(2),
-                                    ),
-                                  ),
-                                )));
+                                    ))));
                       }),
                 ),
         ),

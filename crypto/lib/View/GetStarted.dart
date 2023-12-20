@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:crypto/GetStarted.dart';
+import 'package:crypto/View/GetStarted.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:crypto/MyHomePage.dart';
+import 'package:crypto/View/MyHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
