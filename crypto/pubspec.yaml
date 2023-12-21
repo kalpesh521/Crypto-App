@@ -14,6 +14,8 @@ dependencies:
   flutter_animate: ^4.3.0
   http: ^1.1.0
   page_transition: "^2.1.0"
+  fl_chart: ^0.65.0
+
 
 dev_dependencies:
   flutter_test:
