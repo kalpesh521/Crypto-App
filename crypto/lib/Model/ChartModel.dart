@@ -9,11 +9,16 @@ class ChartModel {
 
   factory ChartModel.fromJson(List l) {
     return ChartModel(
-      time: l[0] == null ? null : l[0]!,
-      open: l[1] == null ? null : l[1]!,
-      high: l[2] == null ? null : l[2]!,
-      low: l[3] == null ? null : l[3]!,
-      close: l[4] == null ? null : l[4]!,
+      time: l[0] == null ? 0 : _formatTime(l[0] as int),
+      open: l[1] == null ? null : l[1] as double,
+      high: l[2] == null ? null : l[2] as double,
+      low: l[3] == null ? null : l[3] as double,
+      close: l[4] == null ? null : l[4] as double,
     );
+  }
+
+  static int _formatTime(int timestamp) {
+    String formattedTime = timestamp.toString().substring(0, 8);
+    return int.parse(formattedTime);
   }
 }

@@ -38,17 +38,15 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> getCurrencies() async {
-    
     String cryptoUrl =
         "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=abd75ba2-b9ae-44c2-89d8-80b8a044544c";
-   
-   
+
     var response = await http.get(Uri.parse(cryptoUrl));
     if (response.statusCode == 200) {
       final Map<String, dynamic> temp = json.decode(response.body);
       setState(() {
         currencies = temp['data'];
-        isLoading = false;
+        isLoading = true;
       });
     } else {
       setState(() {
@@ -90,9 +88,7 @@ class MyHomePageState extends State<MyHomePage> {
         ),
         backgroundColor: Color.fromRGBO(94, 7, 110, 0.863),
       ),
-      body: currencies == null
-          ? Center(child: CircularProgressIndicator())
-          : _cryptoWidget(currencies),
+      body: _cryptoWidget(currencies),
     );
   }
 
@@ -172,7 +168,9 @@ class MyHomePageState extends State<MyHomePage> {
         ),
         Flexible(
           child: (currencies.length == 0)
-              ? Container()
+              ? Center(
+                  child: CircularProgressIndicator(color: Colors.amber),
+                )
               : Padding(
                   padding: EdgeInsets.fromLTRB(3.0, 10.0, 3.0, 5.0),
                   child: ListView.separated(
@@ -187,7 +185,8 @@ class MyHomePageState extends State<MyHomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SelectCoin(Currencies[index]),
+                                  builder: (context) =>
+                                      SelectCoin(Currencies[index]),
                                 ),
                               );
                             },
@@ -205,7 +204,6 @@ class MyHomePageState extends State<MyHomePage> {
                                           radius: 35,
                                           child: new Text(
                                             Currencies[index]['symbol']
-                                          
                                                 .toString(),
                                             style: TextStyle(
                                                 color: Colors.white,

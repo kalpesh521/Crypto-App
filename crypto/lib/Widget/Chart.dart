@@ -1,295 +1,197 @@
-import 'package:crypto/Widget/AppColors.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:crypto/Model/ChartModel.dart';
+import 'package:crypto/Model/CoinModel.dart';
 import 'package:flutter/material.dart';
+import 'package:crypto/View/SelectCoin.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:crypto/View/MyHomePage.dart';
+import 'package:crypto/View/SelectCoin.dart';
 
 class Chart extends StatefulWidget {
-  const Chart({super.key});
-
+  var selectItem;
+  Chart(this.selectItem);
   @override
   State<Chart> createState() => _ChartState();
 }
 
 class _ChartState extends State<Chart> {
-  List<Color> gradientColors = [
-    AppColors.contentColorCyan,
-    AppColors.contentColorBlue,
-  ];
+  late TrackballBehavior trackballBehavior;
 
-  bool showAvg = false;
+  @override
+  void initState() {
+    getChart();
+    trackballBehavior = TrackballBehavior(
+        enable: true, activationMode: ActivationMode.singleTap);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1.70,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              right: 10,
-              left: 10,
-              // top: 24,
-              // bottom: 12,
+    return Container(
+      height: 400,
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Column(
+          children: [
+            isRefresh == true
+                ? Center(
+                    child: CircularProgressIndicator(
+                    color: Colors.amber,
+                  ))
+                : itemChart != null
+                    ? SfCartesianChart(
+                        trackballBehavior: trackballBehavior,
+                        zoomPanBehavior: ZoomPanBehavior(
+                          enablePanning: true,
+                          zoomMode: ZoomMode.x,
+                        ),
+                        series: <CandleSeries>[
+                          CandleSeries<ChartModel, int>(
+                              enableSolidCandles: true,
+                              enableTooltip: true,
+                              bullColor: Colors.green,
+                              bearColor: Colors.red,
+                              dataSource: itemChart!,
+                              xValueMapper: (ChartModel sales, _) => sales.time,
+                              lowValueMapper: (ChartModel sales, _) =>
+                                  sales.low,
+                              highValueMapper: (ChartModel sales, _) =>
+                                  sales.high,
+                              openValueMapper: (ChartModel sales, _) =>
+                                  sales.open,
+                              closeValueMapper: (ChartModel sales, _) =>
+                                  sales.close,
+                              animationDuration: 55),
+                        ],
+                      )
+                    : Text('No data available'),
+            SizedBox(height: 20),
+            Container(
+              height: 35,
+              child: Row(children: [
+                SizedBox(width: 10),
+                ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: text.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              textBool = [
+                                false,
+                                false,
+                                false,
+                                false,
+                                false,
+                                false
+                              ];
+                              textBool[index] = true;
+                            });
+                            setDays(text[index]);
+                            getChart();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: textBool[index] == true
+                                  ? Color.fromARGB(255, 235, 235, 235)
+                                      .withOpacity(1.0)
+                                  : Color.fromARGB(255, 255, 255, 255),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Color.fromARGB(255, 203, 203, 203)
+                                    .withOpacity(0.7),
+                                width: 1,
+                              ),
+                            ),
+                            child: Text(
+                              text[index],
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    })
+              ]),
             ),
-            child: LineChart(
-              showAvg ? avgData() : mainData(),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 60,
-          height: 34,
-          child: TextButton(
-            onPressed: () {
-              setState(() {
-                showAvg = !showAvg;
-              });
-            },
-            child: Text(
-              'avg',
-              style: TextStyle(
-                fontSize: 12,
-                color: showAvg ? const Color.fromARGB(255, 147, 72, 72).withOpacity(0.5) : Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-    );
-    Widget text;
-    switch (value.toInt()) {
-      case 2:
-        text = const Text('MAR', style: style);
-        break;
-      case 4:
-        text = const Text('JUN', style: style);
-        break;
-      case 6:
-        text = const Text('SEP', style: style);
-        break;
-      case 8:
-        text = const Text('Oct', style: style);
-        break;
-      default:
-        text = const Text('', style: style);
-        break;
-    }
-
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: text,
-    );
-  }
-
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 15,
-    );
-    String text;
-    switch (value.toInt()) {
-      case 1:
-        text = '10K';
-        break;
-      case 3:
-        text = '30k';
-        break;
-      case 5:
-        text = '50k';
-        break;
-      default:
-        return Container();
-    }
-
-    return Text(text, style: style, textAlign: TextAlign.left);
-  }
-
-  LineChartData mainData() {
-    return LineChartData(
-      gridData: FlGridData(
-        show: true,
-        drawVerticalLine: true,
-        horizontalInterval: 1,
-        verticalInterval: 1,
-        getDrawingHorizontalLine: (value) {
-          return const FlLine(
-            color: AppColors.mainGridLineColor,
-            strokeWidth: 1,
-          );
-        },
-        getDrawingVerticalLine: (value) {
-          return const FlLine(
-            color: AppColors.mainGridLineColor,
-            strokeWidth: 1,
-          );
-        },
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            interval: 1,
-            getTitlesWidget: bottomTitleWidgets,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            interval: 1,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
-          ),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: Color.fromARGB(255, 203, 231, 253)),
-      ),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
           ],
-          isCurved: true,
-          gradient: LinearGradient(
-            colors: gradientColors,
-          ),
-          barWidth: 5,
-          isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: false,
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            gradient: LinearGradient(
-              colors: gradientColors
-                  .map((color) => color.withOpacity(0.3))
-                  .toList(),
-            ),
-          ),
         ),
-      ],
+      ),
     );
   }
 
-  LineChartData avgData() {
-    return LineChartData(
-      lineTouchData: const LineTouchData(enabled: false),
-      gridData: FlGridData(
-        show: true,
-        drawHorizontalLine: true,
-        verticalInterval: 1,
-        horizontalInterval: 1,
-        getDrawingVerticalLine: (value) {
-          return const FlLine(
-            color: Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-        getDrawingHorizontalLine: (value) {
-          return const FlLine(
-            color: Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            getTitlesWidget: bottomTitleWidgets,
-            interval: 1,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
-            interval: 1,
-          ),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xff37434d)),
-      ),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3.44),
-            FlSpot(2.6, 3.44),
-            FlSpot(4.9, 3.44),
-            FlSpot(6.8, 3.44),
-            FlSpot(8, 3.44),
-            FlSpot(9.5, 3.44),
-            FlSpot(11, 3.44),
-          ],
-          isCurved: true,
-          gradient: LinearGradient(
-            colors: [
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2)!,
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2)!,
-            ],
-          ),
-          barWidth: 5,
-          isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: false,
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            gradient: LinearGradient(
-              colors: [
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
+  List<String> text = ['24H', '7D', '30D', '3M', '6M', 'Y'];
+  List<bool> textBool = [false, false, true, false, false, false];
+  List<ChartModel>? itemChart;
+  int days = 30;
+  bool isRefresh = true;
+  setDays(String txt) {
+    if (txt == '24H') {
+      setState(() {
+        days = 1;
+      });
+    } else if (txt == '7D') {
+      setState(() {
+        days = 7;
+      });
+    } else if (txt == '30D') {
+      setState(() {
+        days = 30;
+      });
+    } else if (txt == '3M') {
+      setState(() {
+        days = 90;
+      });
+    } else if (txt == '6M') {
+      setState(() {
+        days = 180;
+      });
+    } else if (txt == 'Y') {
+      setState(() {
+        days = 365;
+      });
+    }
+  }
+
+  Future<void> getChart() async {
+    String url =
+        'https://api.coingecko.com/api/v3/coins/bitcoin/ohlc?vs_currency=usd&days=1';
+    //     'https://api.coingecko.com/api/v3/coins/' +
+    //         widget.selectItem.id +
+    //         '/ohlc?vs_currency=usd&days=' +
+    //         days.toString();
+    // ;
+
+    setState(() {
+      isRefresh = true;
+    });
+
+    var response = await http.get(Uri.parse(url), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    });
+
+    setState(() {
+      isRefresh = false;
+    });
+    if (response.statusCode == 200) {
+      Iterable x = json.decode(response.body);
+      List<ChartModel> modelList =
+          x.map((e) => ChartModel.fromJson(e)).toList();
+      setState(() {
+        itemChart = modelList;
+        print(itemChart);
+      });
+    } else {
+      print(response.statusCode);
+    }
   }
 }

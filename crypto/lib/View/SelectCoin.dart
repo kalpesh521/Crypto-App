@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:crypto/Model/CoinModel.dart';
 import 'package:crypto/Model/ChartModel.dart';
 import 'package:crypto/View/MyHomePage.dart';
 import 'package:crypto/Widget/Chart.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SelectCoin extends StatefulWidget {
   var Currencies;
@@ -14,12 +16,6 @@ class SelectCoin extends StatefulWidget {
 }
 
 class _SelectCoinState extends State<SelectCoin> {
-  @override
-  void initState() {
-    getChart();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     double myHeight = MediaQuery.of(context).size.height;
@@ -187,18 +183,16 @@ class _SelectCoinState extends State<SelectCoin> {
                 ),
                 Divider(),
                 Container(
-                  height: myHeight * 0.5,
-                  width: myWidth,
-                  child: Chart(),
-                  color: Color.fromRGBO(12, 223, 255, 0.957),
+                  child: Chart(widget.Currencies),
                 ),
+                SizedBox(height: 1),
                 Divider(),
                 Container(
                   child: Column(
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: myWidth * 0.01,
+                            horizontal: myWidth * 0.02,
                             vertical: myHeight * 0.01),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,7 +212,7 @@ class _SelectCoinState extends State<SelectCoin> {
                                 Text(
                                   '\$' +
                                       widget.Currencies['total_supply']
-                                          .toStringAsFixed(2),
+                                          .toStringAsFixed(0),
                                   style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.normal,
@@ -241,7 +235,7 @@ class _SelectCoinState extends State<SelectCoin> {
                                 Text(
                                   '\$' +
                                       widget.Currencies['circulating_supply']
-                                          .toStringAsFixed(2),
+                                          .toStringAsFixed(0),
                                   style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.normal,
@@ -285,37 +279,5 @@ class _SelectCoinState extends State<SelectCoin> {
         ]),
       ),
     ));
-  }
-
-  List<ChartModel>? itemChart;
-
-  bool isRefresh = true;
-
-  Future<void> getChart() async {
-    String url =
-        'https://api.coingecko.com/api/v3/coins/bitcoin/ohlc?vs_currency=usd&days=1';
-
-    setState(() {
-      isRefresh = true;
-    });
-
-    var response = await http.get(Uri.parse(url), headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    });
-
-    setState(() {
-      isRefresh = false;
-    });
-    if (response.statusCode == 200) {
-      Iterable x = json.decode(response.body);
-      List<ChartModel> modelList =
-          x.map((e) => ChartModel.fromJson(e)).toList();
-      setState(() {
-        itemChart = modelList;
-      });
-    } else {
-      print(response.statusCode);
-    }
   }
 }
