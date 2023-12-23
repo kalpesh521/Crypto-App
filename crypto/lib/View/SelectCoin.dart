@@ -183,9 +183,9 @@ class _SelectCoinState extends State<SelectCoin> {
                 ),
                 Divider(),
                 Container(
-                  child: Chart(widget.Currencies),
+                  child: Chart(),
                 ),
-                SizedBox(height: 1),
+                 
                 Divider(),
                 Container(
                   child: Column(
