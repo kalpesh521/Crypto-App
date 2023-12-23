@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:crypto/Model/ChartModel.dart';
-import 'package:crypto/Model/CoinModel.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/View/SelectCoin.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';

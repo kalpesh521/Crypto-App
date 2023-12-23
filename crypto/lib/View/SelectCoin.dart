@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:crypto/Model/CoinModel.dart';
 import 'package:crypto/Model/ChartModel.dart';
 import 'package:crypto/View/MyHomePage.dart';
 import 'package:crypto/Widget/Chart.dart';
@@ -185,7 +184,6 @@ class _SelectCoinState extends State<SelectCoin> {
                 Container(
                   child: Chart(),
                 ),
-                 
                 Divider(),
                 Container(
                   child: Column(
