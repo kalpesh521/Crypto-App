@@ -4,7 +4,7 @@ import 'package:crypto/Model/ChartModel.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/View/SelectCoin.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:crypto/View/MyHomePage.dart';
+import 'package:crypto/View/HomePage.dart';
 import 'package:crypto/View/SelectCoin.dart';
 
 class Chart extends StatefulWidget {
@@ -26,10 +26,10 @@ class _ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 340,
+      height: 320,
       width: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.only(left: 5, right: 5),
         child: Column(
           children: [
             isRefresh == true

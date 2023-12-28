@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:crypto/Model/ChartModel.dart';
-import 'package:crypto/View/MyHomePage.dart';
+import 'package:crypto/Model/local_storage.dart';
+import 'package:crypto/View/HomePage.dart';
+import 'package:crypto/View/Portfolio.dart';
 import 'package:crypto/Widget/Chart.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -15,6 +17,22 @@ class SelectCoin extends StatefulWidget {
 }
 
 class _SelectCoinState extends State<SelectCoin> {
+
+  List<String> _fav=[];
+
+  List<dynamic> portfolio = []; // Portfolio list to store selected coins
+
+  // Function to add coin to the portfolio list
+  void addToPortfolio() {
+    setState(() {
+      // Check if the coin is not already added to the portfolio
+      if (!portfolio.contains(widget.Currencies)) {
+        portfolio.add(widget.Currencies); // Add the selected coin
+        // You can perform any additional actions here, like showing a confirmation message
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double myHeight = MediaQuery.of(context).size.height;
@@ -28,16 +46,50 @@ class _SelectCoinState extends State<SelectCoin> {
             .toStringAsFixed(2)) ??
         0.0;
 
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Image.asset(
+                'assets/images/bitcoin.png',
+                width: 25,
+                height: 25,
+              ),
+            ),
+            Text(
+              'CryptoVerse',
+              style: TextStyle(color: Colors.white, fontFamily: 'Open Sans'),
+            ),
+            SizedBox(width: 110),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      // MaterialPageRoute(builder: (context) => Portfolio(widget.Currencies)));
+                      MaterialPageRoute(builder: (context) => Portfolio(Currencies: widget.Currencies,)));
+                },
+                child: Image.asset(
+                  'assets/images/digital-currency.png',
+                  width: 30,
+                  height: 30,
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Color.fromRGBO(67, 2, 102, 1),
+      ),
       body: Container(
         height: myHeight,
         width: myWidth,
         child: Column(children: [
-          SizedBox(height: 10),
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: myWidth * 0.06, vertical: myHeight * 0.02),
+                horizontal: myWidth * 0.03, vertical: myHeight * 0.02),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -101,7 +153,7 @@ class _SelectCoinState extends State<SelectCoin> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: myWidth * 0.04, vertical: myHeight * 0.02),
+                      horizontal: myWidth * 0.02, vertical: myHeight * 0.01),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -270,12 +322,49 @@ class _SelectCoinState extends State<SelectCoin> {
                       ),
                     ],
                   ),
-                )
+                ),
+                Divider(),
+                SizedBox(height: 5),
+                Center(
+                  child: ElevatedButton(
+                    // onPressed: addToPortfolio,
+                    // Navigator.push(
+                    //   context,
+                    //   PageTransition(
+                    //     child: MyHomePage(),
+                    //     type: PageTransitionType.leftToRight,
+                    //     duration: Duration(milliseconds: 700),
+                    //   ),
+                    // );
+                    // },
+                    onPressed: (){
+                      // _fav.add(widget.Currencies['id'].toString()!);
+                      // LocalStorage.setFav(_fav);
+                    },
+                    child: Text(
+                      "ADD TO PORTFOLIO",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        Color.fromRGBO(67, 2, 102, 1),
+                      ),
+                      padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(horizontal: 35),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ]),
       ),
-    ));
+    );
   }
 }
