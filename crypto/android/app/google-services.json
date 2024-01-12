@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "441796468460",
+    "project_id": "cryptoverse-f002a",
+    "storage_bucket": "cryptoverse-f002a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441796468460:android:17603a58bdf4fe16e78fc9",
+        "android_client_info": {
+          "package_name": "com.example.crypto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCkkn_WaFeTHK-70iTaGwRVh-sjwSjGEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
