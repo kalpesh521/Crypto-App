@@ -1,7 +1,6 @@
-import 'dart:async'; 
+import 'dart:async';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:crypto/View/GetStarted.dart';
-import 'package:crypto/View/LoginPage.dart';
+import 'package:crypto/View/SignIn.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -20,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
         PageTransition(
           type: PageTransitionType.leftToRight,
           duration: Duration(milliseconds: 700), // Set the transition duration
-          child: LoginPage(),
+          child: SignIn(),
         ),
       );
     });

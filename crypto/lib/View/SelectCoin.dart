@@ -1,14 +1,7 @@
-import 'dart:convert';
-import 'package:crypto/Model/ChartModel.dart';
-import 'package:crypto/Model/local_storage.dart';
-import 'package:crypto/View/HomePage.dart';
 import 'package:crypto/View/Portfolio.dart';
 import 'package:crypto/Widget/Chart.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:http/http.dart' as http;
-import 'package:syncfusion_flutter_charts/charts.dart';
-
+  
 class SelectCoin extends StatefulWidget {
   var Currencies;
   SelectCoin(this.Currencies);
@@ -70,7 +63,7 @@ class _SelectCoinState extends State<SelectCoin> {
                 onTap: () {
                   Navigator.push(context,
                       // MaterialPageRoute(builder: (context) => Portfolio(widget.Currencies)));
-                      MaterialPageRoute(builder: (context) => Portfolio(Currencies: widget.Currencies,)));
+                      MaterialPageRoute(builder: (context) => Portfolio( )));
                 },
                 child: Image.asset(
                   'assets/images/digital-currency.png',
