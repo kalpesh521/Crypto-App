@@ -1,9 +1,11 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/View/SignIn.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/User%20Auth/firebase_Services.dart';
 import 'package:crypto/Widget/toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -15,12 +17,62 @@ class _SignUpState extends State<SignUp> {
   final FirebaseAuthServices _auth = FirebaseAuthServices();
   final TextEditingController _usernameController = new TextEditingController();
   final TextEditingController _emailController = new TextEditingController();
+  final TextEditingController _phoneController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
 
   void dispose() {
     _usernameController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
+  }
+
+  addData(String name, String email, String phone) {
+    FirebaseFirestore.instance.collection("Users").add({
+      "Name": name,
+      "email": email,
+      "Phone": phone,
+    });
+  }
+
+  void _signUp() async {
+    setState(() {
+      _isSignUp = true;
+    });
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    User? user = await _auth.signUpwithEmailandPassword(email, password);
+    setState(() {
+      _isSignUp = false;
+    });
+    if (user != null) {
+      showToast(message: 'Account Created Successfully');
+      Navigator.pushNamed(context, "/home");
+    } else {
+      showToast(message: 'Some Error Happened');
+    }
+  }
+
+  void _addUser() async {
+    setState(() {
+      _isSignUp = true;
+    });
+    String username = _usernameController.text.trim();
+    String email = _emailController.text.trim();
+    String phone = _phoneController.text.trim();
+
+    setState(() {
+      _isSignUp = false;
+    });
+
+    User? user = addData(username, email, phone);
+
+    if (user != null && phone.length == 10) {
+      showToast(message: 'Account Created Successfully');
+     } else {
+      showToast(message: 'Some Error Happened');
+    }
   }
 
   @override
@@ -113,7 +165,7 @@ class _SignUpState extends State<SignUp> {
                                 child: TextField(
                                   controller: _usernameController,
                                   decoration: InputDecoration(
-                                      hintText: "Username",
+                                      hintText: "Full Name",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none),
                                 ),
@@ -128,7 +180,27 @@ class _SignUpState extends State<SignUp> {
                                 child: TextField(
                                   controller: _emailController,
                                   decoration: InputDecoration(
-                                      hintText: "Email",
+                                      hintText: "Email Address",
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Colors.grey.shade200)),
+                                ),
+                                child: TextField(
+                                  controller: _phoneController,
+                                  keyboardType: TextInputType.phone,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    LengthLimitingTextInputFormatter(10),
+                                  ],
+                                  decoration: InputDecoration(
+                                      hintText: "Phone Number",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none),
                                 ),
@@ -192,7 +264,12 @@ class _SignUpState extends State<SignUp> {
                         duration: Duration(milliseconds: 1600),
                         child: MaterialButton(
                           onPressed: () {
-                            _signUp();
+                            _signUp(); // Create Account and Authentication
+                            _addUser(); // Add User Data
+                            // addData(
+                            //     _usernameController.text.toString(),
+                            //     _emailController.text.toString(),
+                            //     _phoneController.text.toString());
                           },
                           height: 50,
                           color: Color.fromARGB(255, 98, 34, 116),
@@ -228,25 +305,5 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
-  }
-
-  void _signUp() async {
-    setState(() {
-      _isSignUp = true;
-    });
-    String username = _usernameController.text;
-    String email = _emailController.text;
-    String password = _passwordController.text;
-
-    User? user = await _auth.signUpwithEmailandPassword(email, password);
-    setState(() {
-      _isSignUp = false;
-    });
-    if (user != null) {
-      showToast(message: 'Account Created Successfully');
-      Navigator.pushNamed(context, "/home");
-    } else {
-      showToast(message: 'Some Error Happened');
-    }
   }
 }
