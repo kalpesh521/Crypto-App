@@ -1,24 +1,88 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/Screens/GetStarted.dart';
+import 'package:crypto/Screens/SignIn.dart';
+import 'package:crypto/Screens/demo.dart';
 import 'package:flutter/material.dart';
-import 'package:crypto/User%20Auth/firebase_Services.dart';
-import 'package:crypto/Widget/toast.dart';
-import 'package:crypto/View/SignUp.dart';
+import 'package:crypto/Services/firebase_Services.dart';
+import 'package:crypto/Components/toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
-class SignIn extends StatefulWidget {
+class SignUp extends StatefulWidget {
   @override
-  State<SignIn> createState() => _SignInState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _SignInState extends State<SignIn> {
-  bool _isSignin = false;
+class _SignUpState extends State<SignUp> {
+  bool _isSignUp = false;
   final FirebaseAuthServices _auth = FirebaseAuthServices();
+  final TextEditingController _usernameController = new TextEditingController();
   final TextEditingController _emailController = new TextEditingController();
+  final TextEditingController _phoneController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
 
   void dispose() {
+    _usernameController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
+  }
+// function creates a new user account using email and password.
+  void _signUp() async {
+    setState(() {
+      _isSignUp = true;
+    });
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    User? user = await _auth.signUpwithEmailandPassword(email, password);
+    setState(() {
+      _isSignUp = false;
+    });
+    if (user != null) {
+      showToast(message: 'Account Created Successfully');
+      Navigator.pushNamed(context, "/home");
+    } else {
+      showToast(message: 'Some Error Happened');
+    }
+  }
+
+//  Function to add user data to Firebase Firestore  
+  addData(String name, String email, String phone) {
+    FirebaseFirestore.instance.collection("Users").add({
+      "Name": name,
+      "email": email,
+      "Phone": phone,
+    });
+  }
+
+// function creates a new user account and adds user data to Firebase Firestore
+  void _addUser() async {
+    setState(() {
+      _isSignUp = true;
+    });
+    String name = _usernameController.text.trim();
+    String email = _emailController.text.trim();
+    String phone = _phoneController.text.trim();
+    User? user = await addData(name, email, phone);
+
+    setState(() {
+      _isSignUp = false;
+    });
+
+    if (user != null) {
+      showToast(message: 'Account Created Successfully');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>  demo(),
+        ),
+      );
+      // Navigator.pushNamed(context, "/home");
+    } else {
+      showToast(message: 'Some a Error Happened');
+    }
   }
 
   @override
@@ -31,9 +95,9 @@ class _SignInState extends State<SignIn> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               colors: [
-                Colors.orange.shade900,
-                Colors.orange.shade800,
-                Colors.orange.shade400
+                Color.fromARGB(255, 55, 12, 91),
+                Color.fromARGB(255, 241, 60, 159),
+                Color.fromARGB(255, 255, 134, 225)
               ],
             ),
           ),
@@ -51,7 +115,7 @@ class _SignInState extends State<SignIn> {
                     FadeInUp(
                       duration: Duration(milliseconds: 1000),
                       child: Text(
-                        "Login",
+                        "Register",
                         style: TextStyle(color: Colors.white, fontSize: 40),
                       ),
                     ),
@@ -61,7 +125,7 @@ class _SignInState extends State<SignIn> {
                     FadeInUp(
                       duration: Duration(milliseconds: 1300),
                       child: Text(
-                        "Welcome Back",
+                        "Create Account",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -84,7 +148,7 @@ class _SignInState extends State<SignIn> {
                   child: Column(
                     children: <Widget>[
                       SizedBox(
-                        height: 60,
+                        height: 30,
                       ),
                       FadeInUp(
                         duration: Duration(milliseconds: 1400),
@@ -94,7 +158,7 @@ class _SignInState extends State<SignIn> {
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Color.fromRGBO(225, 95, 27, .3),
+                                  color: Color.fromRGBO(255, 88, 224, 0.298),
                                   blurRadius: 20,
                                   offset: Offset(0, 10),
                                 )
@@ -102,7 +166,22 @@ class _SignInState extends State<SignIn> {
                           child: Column(
                             children: <Widget>[
                               Container(
-                                padding: EdgeInsets.all(10),
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Colors.grey.shade200)),
+                                ),
+                                child: TextField(
+                                  controller: _usernameController,
+                                  decoration: InputDecoration(
+                                      hintText: "Full Name",
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
@@ -111,13 +190,33 @@ class _SignInState extends State<SignIn> {
                                 child: TextField(
                                   controller: _emailController,
                                   decoration: InputDecoration(
-                                      hintText: "Email",
+                                      hintText: "Email Address",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none),
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.all(10),
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Colors.grey.shade200)),
+                                ),
+                                child: TextField(
+                                  controller: _phoneController,
+                                  keyboardType: TextInputType.phone,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    LengthLimitingTextInputFormatter(10),
+                                  ],
+                                  decoration: InputDecoration(
+                                      hintText: "Phone Number",
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
@@ -145,7 +244,7 @@ class _SignInState extends State<SignIn> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Don't have an Account?",
+                                "Already have an Account?",
                                 style: TextStyle(color: Colors.grey),
                               ),
                               SizedBox(
@@ -156,14 +255,13 @@ class _SignInState extends State<SignIn> {
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => SignUp()),
+                                          builder: (context) => SignIn()),
                                       (route) => false);
                                 },
                                 child: Text(
-                                  "Sign Up",
+                                  "Login",
                                   style: TextStyle(
-                                      color: const Color.fromARGB(
-                                          255, 243, 89, 33),
+                                      color: Color.fromARGB(255, 65, 11, 79),
                                       fontWeight: FontWeight.w500),
                                 ),
                               )
@@ -176,23 +274,27 @@ class _SignInState extends State<SignIn> {
                         duration: Duration(milliseconds: 1600),
                         child: MaterialButton(
                           onPressed: () {
-                            _signIn();
+                            // _signUp(); // Create Account and Authentication
+                            _addUser(); // Add User Data
                           },
                           height: 50,
-                          color: Colors.orange[900],
+                          color: Color.fromARGB(255, 98, 34, 116),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                           ),
-                          child: _isSignin
+                          child: _isSignUp
                               ? CircularProgressIndicator(
-                                  color: const Color.fromARGB(255, 255, 255, 255), strokeWidth: 4)
+                                  color:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                  strokeWidth: 4)
                               : Center(
                                   child: Text(
-                                    "Login",
+                                    "Sign Up",
                                     style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                   ),
                                 ),
                         ),
@@ -209,24 +311,5 @@ class _SignInState extends State<SignIn> {
         ),
       ),
     );
-  }
-
-  void _signIn() async {
-    setState(() {
-      _isSignin = true;
-    });
-    String email = _emailController.text;
-    String password = _passwordController.text;
-
-    User? user = await _auth.signInwithEmailandPassword(email, password);
-    setState(() {
-      _isSignin = false;
-    });
-    if (user != null) {
-      showToast(message: 'You are Logged In');
-      Navigator.pushNamed(context, "/home");
-    } else {
-      showToast(message: 'Some Error Happened');
-    }
   }
 }

@@ -1,10 +1,10 @@
-import 'package:crypto/View/Portfolio.dart';
+import 'package:crypto/Screens/Portfolio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
-import 'package:crypto/View/SelectCoin.dart';
+import 'package:crypto/Screens/SelectCoin.dart';
  
 class MyHomePage extends StatefulWidget {
   @override

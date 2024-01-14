@@ -1,5 +1,5 @@
-import 'package:crypto/View/Portfolio.dart';
-import 'package:crypto/Widget/Chart.dart';
+import 'package:crypto/Screens/Portfolio.dart';
+import 'package:crypto/Components/Chart.dart';
 import 'package:flutter/material.dart';
   
 class SelectCoin extends StatefulWidget {

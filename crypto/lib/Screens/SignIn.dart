@@ -1,78 +1,24 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crypto/View/SignIn.dart';
 import 'package:flutter/material.dart';
-import 'package:crypto/User%20Auth/firebase_Services.dart';
-import 'package:crypto/Widget/toast.dart';
+import 'package:crypto/Services/firebase_Services.dart';
+import 'package:crypto/Components/toast.dart';
+import 'package:crypto/Screens/SignUp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 
-class SignUp extends StatefulWidget {
+class SignIn extends StatefulWidget {
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<SignIn> createState() => _SignInState();
 }
 
-class _SignUpState extends State<SignUp> {
-  bool _isSignUp = false;
+class _SignInState extends State<SignIn> {
+  bool _isSignin = false;
   final FirebaseAuthServices _auth = FirebaseAuthServices();
-  final TextEditingController _usernameController = new TextEditingController();
   final TextEditingController _emailController = new TextEditingController();
-  final TextEditingController _phoneController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
 
   void dispose() {
-    _usernameController.dispose();
     _emailController.dispose();
-    _phoneController.dispose();
     _passwordController.dispose();
-  }
-
-  addData(String name, String email, String phone) {
-    FirebaseFirestore.instance.collection("Users").add({
-      "Name": name,
-      "email": email,
-      "Phone": phone,
-    });
-  }
-
-  void _signUp() async {
-    setState(() {
-      _isSignUp = true;
-    });
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    User? user = await _auth.signUpwithEmailandPassword(email, password);
-    setState(() {
-      _isSignUp = false;
-    });
-    if (user != null) {
-      showToast(message: 'Account Created Successfully');
-      Navigator.pushNamed(context, "/home");
-    } else {
-      showToast(message: 'Some Error Happened');
-    }
-  }
-
-  void _addUser() async {
-    setState(() {
-      _isSignUp = true;
-    });
-    String username = _usernameController.text.trim();
-    String email = _emailController.text.trim();
-    String phone = _phoneController.text.trim();
-
-    setState(() {
-      _isSignUp = false;
-    });
-
-    User? user = addData(username, email, phone);
-
-    if (user != null && phone.length == 10) {
-      showToast(message: 'Account Created Successfully');
-     } else {
-      showToast(message: 'Some Error Happened');
-    }
   }
 
   @override
@@ -85,9 +31,9 @@ class _SignUpState extends State<SignUp> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               colors: [
-                Color.fromARGB(255, 55, 12, 91),
-                Color.fromARGB(255, 241, 60, 159),
-                Color.fromARGB(255, 255, 134, 225)
+                Colors.orange.shade900,
+                Colors.orange.shade800,
+                Colors.orange.shade400
               ],
             ),
           ),
@@ -105,7 +51,7 @@ class _SignUpState extends State<SignUp> {
                     FadeInUp(
                       duration: Duration(milliseconds: 1000),
                       child: Text(
-                        "Register",
+                        "Login",
                         style: TextStyle(color: Colors.white, fontSize: 40),
                       ),
                     ),
@@ -115,7 +61,7 @@ class _SignUpState extends State<SignUp> {
                     FadeInUp(
                       duration: Duration(milliseconds: 1300),
                       child: Text(
-                        "Create Account",
+                        "Welcome Back",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -138,7 +84,7 @@ class _SignUpState extends State<SignUp> {
                   child: Column(
                     children: <Widget>[
                       SizedBox(
-                        height: 30,
+                        height: 60,
                       ),
                       FadeInUp(
                         duration: Duration(milliseconds: 1400),
@@ -148,7 +94,7 @@ class _SignUpState extends State<SignUp> {
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Color.fromRGBO(255, 88, 224, 0.298),
+                                  color: Color.fromRGBO(225, 95, 27, .3),
                                   blurRadius: 20,
                                   offset: Offset(0, 10),
                                 )
@@ -156,22 +102,7 @@ class _SignUpState extends State<SignUp> {
                           child: Column(
                             children: <Widget>[
                               Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.grey.shade200)),
-                                ),
-                                child: TextField(
-                                  controller: _usernameController,
-                                  decoration: InputDecoration(
-                                      hintText: "Full Name",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(8),
+                                padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
@@ -180,33 +111,13 @@ class _SignUpState extends State<SignUp> {
                                 child: TextField(
                                   controller: _emailController,
                                   decoration: InputDecoration(
-                                      hintText: "Email Address",
+                                      hintText: "Email",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none),
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.grey.shade200)),
-                                ),
-                                child: TextField(
-                                  controller: _phoneController,
-                                  keyboardType: TextInputType.phone,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    LengthLimitingTextInputFormatter(10),
-                                  ],
-                                  decoration: InputDecoration(
-                                      hintText: "Phone Number",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(8),
+                                padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
@@ -234,7 +145,7 @@ class _SignUpState extends State<SignUp> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Already have an Account?",
+                                "Don't have an Account?",
                                 style: TextStyle(color: Colors.grey),
                               ),
                               SizedBox(
@@ -245,13 +156,14 @@ class _SignUpState extends State<SignUp> {
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => SignIn()),
+                                          builder: (context) => SignUp()),
                                       (route) => false);
                                 },
                                 child: Text(
-                                  "Login",
+                                  "Sign Up",
                                   style: TextStyle(
-                                      color: Color.fromARGB(255, 65, 11, 79),
+                                      color: const Color.fromARGB(
+                                          255, 243, 89, 33),
                                       fontWeight: FontWeight.w500),
                                 ),
                               )
@@ -264,31 +176,23 @@ class _SignUpState extends State<SignUp> {
                         duration: Duration(milliseconds: 1600),
                         child: MaterialButton(
                           onPressed: () {
-                            _signUp(); // Create Account and Authentication
-                            _addUser(); // Add User Data
-                            // addData(
-                            //     _usernameController.text.toString(),
-                            //     _emailController.text.toString(),
-                            //     _phoneController.text.toString());
+                            _signIn();
                           },
                           height: 50,
-                          color: Color.fromARGB(255, 98, 34, 116),
+                          color: Colors.orange[900],
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                           ),
-                          child: _isSignUp
+                          child: _isSignin
                               ? CircularProgressIndicator(
-                                  color:
-                                      const Color.fromARGB(255, 255, 255, 255),
-                                  strokeWidth: 4)
+                                  color: const Color.fromARGB(255, 255, 255, 255), strokeWidth: 4)
                               : Center(
                                   child: Text(
-                                    "Sign Up",
+                                    "Login",
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
                                   ),
                                 ),
                         ),
@@ -305,5 +209,24 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
+  }
+
+  void _signIn() async {
+    setState(() {
+      _isSignin = true;
+    });
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    User? user = await _auth.signInwithEmailandPassword(email, password);
+    setState(() {
+      _isSignin = false;
+    });
+    if (user != null) {
+      showToast(message: 'You are Logged In');
+      Navigator.pushNamed(context, "/home");
+    } else {
+      showToast(message: 'Some Error Happened');
+    }
   }
 }
