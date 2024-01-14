@@ -1,4 +1,5 @@
 import 'package:crypto/Screens/GetStarted.dart';
+import 'package:crypto/Screens/HomePage.dart';
 import 'package:crypto/Screens/SplashScreen.dart';
 import 'package:crypto/Screens/demo.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -39,7 +40,7 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.amber),
       // home: SplashScreen(),
-      home: SignUp(),
+      home: MyHomePage(),
       debugShowCheckedModeBanner: false,
       routes: {
         '/login': (context) => SignIn(),

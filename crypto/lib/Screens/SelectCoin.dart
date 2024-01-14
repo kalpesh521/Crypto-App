@@ -1,7 +1,8 @@
+import 'package:crypto/Components/Appbar.dart';
 import 'package:crypto/Screens/Portfolio.dart';
 import 'package:crypto/Components/Chart.dart';
 import 'package:flutter/material.dart';
-  
+
 class SelectCoin extends StatefulWidget {
   var Currencies;
   SelectCoin(this.Currencies);
@@ -10,8 +11,7 @@ class SelectCoin extends StatefulWidget {
 }
 
 class _SelectCoinState extends State<SelectCoin> {
-
-  List<String> _fav=[];
+  List<String> _fav = [];
 
   List<dynamic> portfolio = []; // Portfolio list to store selected coins
 
@@ -40,42 +40,7 @@ class _SelectCoinState extends State<SelectCoin> {
         0.0;
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Image.asset(
-                'assets/images/bitcoin.png',
-                width: 25,
-                height: 25,
-              ),
-            ),
-            Text(
-              'CryptoVerse',
-              style: TextStyle(color: Colors.white, fontFamily: 'Open Sans'),
-            ),
-            SizedBox(width: 110),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      // MaterialPageRoute(builder: (context) => Portfolio(widget.Currencies)));
-                      MaterialPageRoute(builder: (context) => Portfolio( )));
-                },
-                child: Image.asset(
-                  'assets/images/digital-currency.png',
-                  width: 30,
-                  height: 30,
-                ),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Color.fromRGBO(67, 2, 102, 1),
-      ),
+      appBar: Appbar(),
       body: Container(
         height: myHeight,
         width: myWidth,
@@ -330,7 +295,7 @@ class _SelectCoinState extends State<SelectCoin> {
                     //   ),
                     // );
                     // },
-                    onPressed: (){
+                    onPressed: () {
                       // _fav.add(widget.Currencies['id'].toString()!);
                       // LocalStorage.setFav(_fav);
                     },

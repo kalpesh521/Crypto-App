@@ -1,11 +1,11 @@
-import 'package:crypto/Screens/Portfolio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:crypto/Components/Appbar.dart';
+import 'package:crypto/Screens/SelectCoin.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:async';
-import 'package:crypto/Screens/SelectCoin.dart';
- 
+
 class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => MyHomePageState();
@@ -23,6 +23,7 @@ class MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     text_controller = TextEditingController();
+
     Timer.periodic(Duration(seconds: 1), (Timer timer) {
       setState(() {
         _textColor = colors[colorIndex];
@@ -70,74 +71,7 @@ class MyHomePageState extends State<MyHomePage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Image.asset(
-                'assets/images/bitcoin.png',
-                width: 25,
-                height: 25,
-              ),
-            ),
-            Text(
-              'CryptoVerse',
-              style: TextStyle(color: Colors.white, fontFamily: 'Open Sans'),
-            ),
-            SizedBox(width: 115),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: PopupMenuButton<String>(
-                icon: Icon(Icons.more_vert_rounded, color: Colors.white),
-                onSelected: (value) {
-                  if (value == 'portfolio') {
-                    // Handle portfolio action
-                    print('Portfolio Selected');
-                  } else if (value == 'signOut') {
-                    // Handle sign out action
-                    print('Sign Out Selected');
-                  }
-                },
-                itemBuilder: (BuildContext context) {
-                  return [
-                    PopupMenuItem<String>(
-                      value: 'portfolio',
-                      child: ListTile(
-                        onTap: () {
-                          //  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:Portfolio()), (route) => false);
-                        },
-                        leading: Container(
-                          child: Icon(Icons.portrait, color: Colors.pink),
-                        ),
-                        title: Text('Portfolio'),
-                      ),
-                    ),
-                    PopupMenuDivider(),
-                    PopupMenuItem<String>(
-                      value: 'signOut',
-                      child: ListTile(
-                         
-                        onTap: () {
-                           FirebaseAuth.instance.signOut();
-                          Navigator.pushNamed(context, "/login");
-                        },
-                        leading: Container(
-                          child: Icon(Icons.exit_to_app, color: Colors.pink),
-                        ),
-                        title: Text('Sign Out'),
-                      ),
-                    ),
-                  ];
-                },
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Color.fromRGBO(67, 2, 102, 1),
-      ),
+      appBar: Appbar(),
       body: _cryptoWidget(currencies),
     );
   }

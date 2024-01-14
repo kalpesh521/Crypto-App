@@ -28,6 +28,7 @@ class _SignUpState extends State<SignUp> {
     _phoneController.dispose();
     _passwordController.dispose();
   }
+
 // function creates a new user account using email and password.
   void _signUp() async {
     setState(() {
@@ -48,7 +49,7 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
-//  Function to add user data to Firebase Firestore  
+//  Function to add user data to Firebase Firestore
   addData(String name, String email, String phone) {
     FirebaseFirestore.instance.collection("Users").add({
       "Name": name,
@@ -57,33 +58,68 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-// function creates a new user account and adds user data to Firebase Firestore
-  void _addUser() async {
+  void _addUserA() async {
     setState(() {
       _isSignUp = true;
     });
     String name = _usernameController.text.trim();
     String email = _emailController.text.trim();
     String phone = _phoneController.text.trim();
-    User? user = await addData(name, email, phone);
+
+    // Create user account
+    User? user = await _auth.signUpwithEmailandPassword(email, 'password');
+    if (user != null) {
+      // Add user data to Firestore
+      await addData(name, email, phone);
+
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>  GetStarted(),
+          ),
+        );
+      } else {
+        showToast(message: 'Error retrieving current user data');
+      }
+      // Navigate to demo page
+    } else {
+      showToast(message: 'Some Error Happened');
+    }
 
     setState(() {
       _isSignUp = false;
     });
-
-    if (user != null) {
-      showToast(message: 'Account Created Successfully');
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>  demo(),
-        ),
-      );
-      // Navigator.pushNamed(context, "/home");
-    } else {
-      showToast(message: 'Some a Error Happened');
-    }
   }
+
+// function creates a new user account and adds user data to Firebase Firestore
+  // void _addUser() async {
+  //   setState(() {
+  //     _isSignUp = true;
+  //   });
+  //   String name = _usernameController.text.trim();
+  //   String email = _emailController.text.trim();
+  //   String phone = _phoneController.text.trim();
+  //   User? user = await addData(name, email, phone);
+
+  //   setState(() {
+  //     _isSignUp = false;
+  //   });
+
+  //   if (user != null) {
+  //     showToast(message: 'Account Created Successfully');
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => demo(),
+  //       ),
+  //     );
+  //     // Navigator.pushNamed(context, "/home");
+  //   } else {
+  //     showToast(message: 'Some a Error Happened');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +311,7 @@ class _SignUpState extends State<SignUp> {
                         child: MaterialButton(
                           onPressed: () {
                             // _signUp(); // Create Account and Authentication
-                            _addUser(); // Add User Data
+                            _addUserA(); // Add User Data
                           },
                           height: 50,
                           color: Color.fromARGB(255, 98, 34, 116),
