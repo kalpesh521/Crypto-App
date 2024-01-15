@@ -23,50 +23,61 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
               'CryptoVerse',
               style: TextStyle(color: Colors.white, fontFamily: 'Open Sans'),
             ),
-            SizedBox(width: 115),
+            SizedBox(width: 135),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 5.0),
+            //   child: PopupMenuButton<String>(
+            //     icon: Icon(Icons.more_vert_rounded, color: Colors.white),
+            //     onSelected: (value) {
+            //       if (value == 'portfolio') {
+            //         // Handle portfolio action
+            //         print('Portfolio Selected');
+            //       } else if (value == 'signOut') {
+            //         // Handle sign out action
+            //         print('Sign Out Selected');
+            //       }
+            //     },
+            //     itemBuilder: (BuildContext context) {
+            //       return [
+            //         PopupMenuItem<String>(
+            //           value: 'portfolio',
+            //           child: ListTile(
+            //             onTap: () {
+            //               //  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:Portfolio()), (route) => false);
+            //             },
+            //             leading: Container(
+            //               child: Icon(Icons.portrait, color: Colors.pink),
+            //             ),
+            //             title: Text('Portfolio'),
+            //           ),
+            //         ),
+            //         PopupMenuDivider(),
+            //         PopupMenuItem<String>(
+            //           value: 'signOut',
+            //           child: ListTile(
+            //             onTap: () {
+            //               FirebaseAuth.instance.signOut();
+            //               Navigator.pushNamed(context, "/login");
+            //             },
+            //             leading: Container(
+            //               child: Icon(Icons.exit_to_app, color: Colors.pink),
+            //             ),
+            //             title: Text('Sign Out'),
+            //           ),
+            //         ),
+            //       ];
+            //     },
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: PopupMenuButton<String>(
-                icon: Icon(Icons.more_vert_rounded, color: Colors.white),
-                onSelected: (value) {
-                  if (value == 'portfolio') {
-                    // Handle portfolio action
-                    print('Portfolio Selected');
-                  } else if (value == 'signOut') {
-                    // Handle sign out action
-                    print('Sign Out Selected');
-                  }
+              child: InkWell(
+                onTap: () {
+                   print('Sign Out Selected');
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pushNamed(context, "/login");
                 },
-                itemBuilder: (BuildContext context) {
-                  return [
-                    PopupMenuItem<String>(
-                      value: 'portfolio',
-                      child: ListTile(
-                        onTap: () {
-                          //  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:Portfolio()), (route) => false);
-                        },
-                        leading: Container(
-                          child: Icon(Icons.portrait, color: Colors.pink),
-                        ),
-                        title: Text('Portfolio'),
-                      ),
-                    ),
-                    PopupMenuDivider(),
-                    PopupMenuItem<String>(
-                      value: 'signOut',
-                      child: ListTile(
-                        onTap: () {
-                          FirebaseAuth.instance.signOut();
-                          Navigator.pushNamed(context, "/login");
-                        },
-                        leading: Container(
-                          child: Icon(Icons.exit_to_app, color: Colors.pink),
-                        ),
-                        title: Text('Sign Out'),
-                      ),
-                    ),
-                  ];
-                },
+                child: Icon(Icons.exit_to_app, color: Colors.white),
               ),
             ),
           ],

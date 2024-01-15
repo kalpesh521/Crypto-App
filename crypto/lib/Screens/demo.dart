@@ -27,7 +27,7 @@ class demo extends StatelessWidget {
               Icon(Icons.people),
               SizedBox(
                 width: 15,
-              ),
+              ),  
               FutureBuilder(
                    future: FirebaseFirestore.instance
                       .collection('Users')

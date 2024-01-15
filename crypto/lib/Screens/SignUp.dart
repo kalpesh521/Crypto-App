@@ -29,27 +29,6 @@ class _SignUpState extends State<SignUp> {
     _passwordController.dispose();
   }
 
-// function creates a new user account using email and password.
-  void _signUp() async {
-    setState(() {
-      _isSignUp = true;
-    });
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    User? user = await _auth.signUpwithEmailandPassword(email, password);
-    setState(() {
-      _isSignUp = false;
-    });
-    if (user != null) {
-      showToast(message: 'Account Created Successfully');
-      Navigator.pushNamed(context, "/home");
-    } else {
-      showToast(message: 'Some Error Happened');
-    }
-  }
-
-//  Function to add user data to Firebase Firestore
   addData(String name, String email, String phone) {
     FirebaseFirestore.instance.collection("Users").add({
       "Name": name,
@@ -57,8 +36,9 @@ class _SignUpState extends State<SignUp> {
       "Phone": phone,
     });
   }
+// function creates a new user account using email and password.
 
-  void _addUserA() async {
+  void _addUser() async {
     setState(() {
       _isSignUp = true;
     });
@@ -77,7 +57,7 @@ class _SignUpState extends State<SignUp> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>  GetStarted(),
+            builder: (context) => GetStarted(),
           ),
         );
       } else {
@@ -92,34 +72,6 @@ class _SignUpState extends State<SignUp> {
       _isSignUp = false;
     });
   }
-
-// function creates a new user account and adds user data to Firebase Firestore
-  // void _addUser() async {
-  //   setState(() {
-  //     _isSignUp = true;
-  //   });
-  //   String name = _usernameController.text.trim();
-  //   String email = _emailController.text.trim();
-  //   String phone = _phoneController.text.trim();
-  //   User? user = await addData(name, email, phone);
-
-  //   setState(() {
-  //     _isSignUp = false;
-  //   });
-
-  //   if (user != null) {
-  //     showToast(message: 'Account Created Successfully');
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => demo(),
-  //       ),
-  //     );
-  //     // Navigator.pushNamed(context, "/home");
-  //   } else {
-  //     showToast(message: 'Some a Error Happened');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -310,8 +262,7 @@ class _SignUpState extends State<SignUp> {
                         duration: Duration(milliseconds: 1600),
                         child: MaterialButton(
                           onPressed: () {
-                            // _signUp(); // Create Account and Authentication
-                            _addUserA(); // Add User Data
+                            _addUser(); // Add User Data
                           },
                           height: 50,
                           color: Color.fromARGB(255, 98, 34, 116),
