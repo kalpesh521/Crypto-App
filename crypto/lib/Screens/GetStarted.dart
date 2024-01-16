@@ -106,7 +106,7 @@ class _GetStartedState extends State<GetStarted> {
                       Navigator.push(
                         context,
                         PageTransition(
-                          child: MyHomePage(),
+                          child: HomePage(),
                           type: PageTransitionType.leftToRight,
                           duration: Duration(milliseconds: 700),
                         ),

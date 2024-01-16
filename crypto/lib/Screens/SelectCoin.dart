@@ -191,8 +191,14 @@ class _SelectCoinState extends State<SelectCoin> {
                   ),
                 ),
                 Divider(),
+                SizedBox(
+                  height: 20,
+                ),
                 Container(
                   child: Chart(),
+                ),
+                SizedBox(
+                  height: 20,
                 ),
                 Divider(),
                 Container(
@@ -278,44 +284,9 @@ class _SelectCoinState extends State<SelectCoin> {
                           ],
                         ),
                       ),
+                                      Divider(),
+
                     ],
-                  ),
-                ),
-                Divider(),
-                SizedBox(height: 5),
-                Center(
-                  child: ElevatedButton(
-                    // onPressed: addToPortfolio,
-                    // Navigator.push(
-                    //   context,
-                    //   PageTransition(
-                    //     child: MyHomePage(),
-                    //     type: PageTransitionType.leftToRight,
-                    //     duration: Duration(milliseconds: 700),
-                    //   ),
-                    // );
-                    // },
-                    onPressed: () {
-                      // _fav.add(widget.Currencies['id'].toString()!);
-                      // LocalStorage.setFav(_fav);
-                    },
-                    child: Text(
-                      "ADD TO PORTFOLIO",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        Color.fromRGBO(67, 2, 102, 1),
-                      ),
-                      padding: MaterialStateProperty.all(
-                        EdgeInsets.symmetric(horizontal: 35),
-                      ),
-                    ),
                   ),
                 ),
               ],

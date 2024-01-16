@@ -6,12 +6,12 @@ import 'package:crypto/Screens/SelectCoin.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => MyHomePageState();
+  State<HomePage> createState() => HomePageState();
 }
 
-class MyHomePageState extends State<MyHomePage> {
+class HomePageState extends State<HomePage> {
   bool isLoading = true;
   List<dynamic> currencies = [];
   bool init = false;
@@ -24,7 +24,7 @@ class MyHomePageState extends State<MyHomePage> {
     super.initState();
     text_controller = TextEditingController();
 
-    Timer.periodic(Duration(seconds: 1), (Timer timer) {
+    Timer.periodic(Duration(seconds: 2), (Timer timer) {
       setState(() {
         _textColor = colors[colorIndex];
         colorIndex = (colorIndex + 1) % colors.length;
